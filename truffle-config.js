@@ -49,10 +49,18 @@
 const HDWalletProvider = require('@truffle/hdwallet-provider');
 
 require('dotenv').config();
-const { MNEMONIC } = process.env;
+const { MNEMONIC, ETHERSCAN_API_KEY, POLYGONSCAN_API_KEY } = process.env;
 
 if (!MNEMONIC) {
   throw new Error('Please set MNEMONIC in file .env !');
+}
+
+if (!ETHERSCAN_API_KEY) {
+  console.log('Please set ETHERSCAN_API_KEY in file .env !');
+}
+
+if (!POLYGONSCAN_API_KEY) {
+  console.log('Please set POLYGONSCAN_API_KEY in file .env !');
 }
 
 const MUMBAI_RPC_LIST = [
@@ -126,6 +134,11 @@ module.exports = {
       skipDryRun: true,
       gasPrice: 250000000,
       networkCheckTimeout: 90000,
+      verify: {
+        apiUrl: 'https://apothem.blocksscan.io/api',
+        apiKey: ETHERSCAN_API_KEY,
+        // explorerUrl: 'https://explorer.apothem.network',
+      },
     },
     xinfin: {
       provider: () =>
@@ -141,6 +154,11 @@ module.exports = {
       skipDryRun: true,
       gasPrice: 250000000,
       networkCheckTimeout: 90000,
+      verify: {
+        apiUrl: 'https://xdc.blocksscan.io/api',
+        apiKey: ETHERSCAN_API_KEY,
+        // explorerUrl: 'https://explorer.xinfin.network',
+      },
     },
     mumbai: {
       provider: () =>
@@ -178,6 +196,13 @@ module.exports = {
         // evmVersion: "byzantium"
       },
     },
+  },
+
+  plugins: ['truffle-plugin-verify'],
+
+  api_keys: {
+    etherscan: ETHERSCAN_API_KEY,
+    polygonscan: POLYGONSCAN_API_KEY,
   },
 
   // Truffle DB is currently disabled by default; to enable it, change enabled:

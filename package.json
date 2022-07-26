@@ -33,7 +33,13 @@
     "compile": "npx truffle compile",
     "migrate:apothem": "npx truffle migrate --network apothem",
     "migrate:xinfin": "npx truffle migrate --network xinfin",
-    "migrate:mumbai": "npx truffle migrate --network mumbai"
+    "migrate:mumbai": "npx truffle migrate --network mumbai",
+    "verify:apothem": "npx truffle run verify --network apothem TestCoin",
+    "verify:xinfin": "npx truffle run verify --network xinfin TestCoin",
+    "verify:mumbai": "npx truffle run verify --network mumbai TestCoin",
+    "deploy:apothem": "yarn migrate:apothem && yarn verify:apothem",
+    "deploy:xinfin": "yarn migrate:xinfin && yarn verify:xinfin",
+    "deploy:mumbai": "yarn migrate:mumbai && yarn verify:mumbai"
   },
   "devDependencies": {
     "@truffle/hdwallet-provider": "^2.0.14",
