@@ -7,7 +7,7 @@
  * More information about configuration can be found at:
  *
  * https://trufflesuite.com/docs/truffle/reference/configuration
- * 
+ *
  * Hands-off deployment with Infura
  * --------------------------------
  *
@@ -15,29 +15,29 @@
  * Use this appproach to make deployment a breeze 🏖️:
  *
  * Infura deployment needs a wallet provider (like @truffle/hdwallet-provider)
- * to sign transactions before they're sent to a remote public node. 
+ * to sign transactions before they're sent to a remote public node.
  * Infura accounts are available for free at 🔍: https://infura.io/register
  *
  * You'll need a mnemonic - the twelve word phrase the wallet uses to generate
- * public/private key pairs. You can store your secrets 🤐 in a .env file. 
- * In your project root, run `$ npm install dotenv`. 
- * Create .env (which should be .gitignored) and declare your MNEMONIC 
+ * public/private key pairs. You can store your secrets 🤐 in a .env file.
+ * In your project root, run `$ npm install dotenv`.
+ * Create .env (which should be .gitignored) and declare your MNEMONIC
  * and Infura PROJECT_ID variables inside.
  * For example, your .env file will have the following structure:
- * 
+ *
  * MNEMONIC = <Your 12 phrase mnemonic>
  * PROJECT_ID = <Your Infura project id>
- * 
+ *
  * Deployment with Truffle Dashboard (Recommended for best security practice)
  * --------------------------------------------------------------------------
- * 
+ *
  * Are you concerned about security and minimizing rekt status 🤔?
  * Use this method for best security:
- * 
- * Truffle Dashboard lets you review transactions in detail, and leverages 
- * MetaMask for signing, so there's no need to copy-paste your mnemonic. 
- * More details can be found at 🔎: 
- * 
+ *
+ * Truffle Dashboard lets you review transactions in detail, and leverages
+ * MetaMask for signing, so there's no need to copy-paste your mnemonic.
+ * More details can be found at 🔎:
+ *
  * https://trufflesuite.com/docs/truffle/getting-started/using-the-truffle-dashboard/
  */
 
@@ -45,6 +45,22 @@
 // const { MNEMONIC, PROJECT_ID } = process.env;
 
 // const HDWalletProvider = require('@truffle/hdwallet-provider');
+
+const HDWalletProvider = require('@truffle/hdwallet-provider');
+
+require('dotenv').config();
+const { MNEMONIC } = process.env;
+
+if (!MNEMONIC) {
+  throw new Error('Please set MNEMONIC in file .env !');
+}
+
+const MUMBAI_RPC_LIST = [
+  'https://matic-mumbai.chainstacklabs.com',
+  'https://rpc-mumbai.matic.today',
+  'https://rpc-mumbai.maticvigil.com',
+  'https://matic-testnet-archive-rpc.bwarelabs.com',
+];
 
 module.exports = {
   /**
@@ -96,6 +112,51 @@ module.exports = {
     //   network_id: 2111,   // This network is yours, in the cloud.
     //   production: true    // Treats this network as if it was a public net. (default: false)
     // }
+    apothem: {
+      provider: () =>
+        new HDWalletProvider({
+          mnemonic: {
+            phrase: MNEMONIC,
+          },
+          providerOrUrl: 'https://rpc.apothem.network',
+        }),
+      network_id: '51',
+      confirmations: 2,
+      timeoutBlocks: 200,
+      skipDryRun: true,
+      gasPrice: 250000000,
+      networkCheckTimeout: 90000,
+    },
+    xinfin: {
+      provider: () =>
+        new HDWalletProvider({
+          mnemonic: {
+            phrase: MNEMONIC,
+          },
+          providerOrUrl: 'https://rpc.xinfin.network',
+        }),
+      network_id: '50',
+      confirmations: 2,
+      timeoutBlocks: 200,
+      skipDryRun: true,
+      gasPrice: 250000000,
+      networkCheckTimeout: 90000,
+    },
+    mumbai: {
+      provider: () =>
+        new HDWalletProvider({
+          mnemonic: {
+            phrase: MNEMONIC,
+          },
+          providerOrUrl: MUMBAI_RPC_LIST[0],
+        }),
+      network_id: '80001',
+      confirmations: 2,
+      timeoutBlocks: 200,
+      skipDryRun: true,
+      gasPrice: 40000000000,
+      networkCheckTimeout: 90000,
+    },
   },
 
   // Set default mocha options here, use special reporters, etc.
@@ -106,16 +167,17 @@ module.exports = {
   // Configure your compilers
   compilers: {
     solc: {
-      version: "0.8.16",      // Fetch exact version from solc-bin (default: truffle's version)
-      // docker: true,        // Use "0.5.1" you've installed locally with docker (default: false)
-      // settings: {          // See the solidity docs for advice about optimization and evmVersion
-      //  optimizer: {
-      //    enabled: false,
-      //    runs: 200
-      //  },
-      //  evmVersion: "byzantium"
-      // }
-    }
+      version: '0.8.17', // Fetch exact version from solc-bin (default: truffle's version)
+      // docker: true, // Use "0.5.1" you've installed locally with docker (default: false)
+      settings: {
+        // See the solidity docs for advice about optimization and evmVersion
+        optimizer: {
+          enabled: true,
+          runs: 200,
+        },
+        // evmVersion: "byzantium"
+      },
+    },
   },
 
   // Truffle DB is currently disabled by default; to enable it, change enabled:
