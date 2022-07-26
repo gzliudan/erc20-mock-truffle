@@ -28,6 +28,13 @@
     "npm": ">=6.14.4",
     "yarn": ">=1.22.0"
   },
+  "scripts": {
+    "clean": "rm -rf ./build",
+    "compile": "npx truffle compile",
+    "migrate:apothem": "npx truffle migrate --network apothem",
+    "migrate:xinfin": "npx truffle migrate --network xinfin",
+    "migrate:mumbai": "npx truffle migrate --network mumbai"
+  },
   "devDependencies": {
     "@truffle/hdwallet-provider": "^2.0.14",
     "dotenv": "^16.0.2",
