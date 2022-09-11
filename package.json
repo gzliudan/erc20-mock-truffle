@@ -29,6 +29,7 @@
     "yarn": ">=1.22.0"
   },
   "devDependencies": {
+    "@truffle/hdwallet-provider": "^2.0.14",
     "dotenv": "^16.0.2",
     "eslint": "^8.23.0",
     "eslint-config-prettier": "^8.5.0",
